@@ -54,18 +54,16 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 	// e.g. "type Foo struct {}" or "type Bar = string"
 	ts, ok := spec.(*ast.TypeSpec)
 	if ok && ts.Name.IsExported() {
-		fmt.Println("s:", s)
-		fmt.Println("ts:", ts)
-		fmt.Println("group:", group)
+		fmt.Println(ts)
+		fmt.Println(group)
 		g.writeTypeSpec(s, ts, group)
 	}
 
 	// e.g. "const Foo = 123"
 	vs, ok := spec.(*ast.ValueSpec)
 	if ok {
-		fmt.Println("s:", s)
-		fmt.Println("vs:", vs)
-		fmt.Println("group:", group)
+		fmt.Println(vs)
+		fmt.Println(group)
 		g.writeValueSpec(s, vs, group)
 	}
 }
