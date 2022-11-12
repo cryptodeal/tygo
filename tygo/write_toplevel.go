@@ -94,7 +94,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 
 	_, isIdent := ts.Type.(*ast.Ident)
 	if isIdent {
-		fmt.Println("isIdent")
+		// fmt.Println("isIdent")
 		s.WriteString("export enum ")
 		// s.WriteString("export type ")
 		s.WriteString(ts.Name.Name)
@@ -102,7 +102,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 	}
 
 	if !isStruct && !isIdent {
-		fmt.Println("!isStruct && !isIdent")
+		// fmt.Println("!isStruct && !isIdent")
 		s.WriteString("export type ")
 		s.WriteString(ts.Name.Name)
 		s.WriteString(" = ")
