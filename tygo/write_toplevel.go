@@ -65,12 +65,6 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 		fmt.Println("group:", group)
 		g.writeValueSpec(s, vs, group)
 	}
-
-	_, isIdent := ts.Type.(*ast.Ident)
-	if isIdent {
-		s.WriteString("}\n")
-	}
-
 }
 
 // Writing of type specs, which are expressions like
@@ -124,7 +118,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 	}
 }
 
-// Writign of value specs, which are exported const expressions like
+// Writing of value specs, which are exported const expressions like
 // const SomeValue = 3
 func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec, group *groupContext) {
 	for i, name := range vs.Names {
@@ -192,7 +186,6 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 		}
 		if vs.Type != nil {
 			s.WriteByte(',')
-
 		} else if group.groupType != "" && !hasExplicitValue {
 			s.WriteByte(';')
 		}
@@ -203,5 +196,8 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			s.WriteByte('\n')
 		}
 
+	}
+	if vs.Type != nil {
+		s.WriteString("}\n")
 	}
 }
