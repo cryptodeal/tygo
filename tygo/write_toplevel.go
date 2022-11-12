@@ -59,6 +59,7 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 	// e.g. "const Foo = 123"
 	vs, ok := spec.(*ast.ValueSpec)
 	if ok {
+		fmt.Println(group)
 		g.writeValueSpec(s, vs, group)
 	}
 }

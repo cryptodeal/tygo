@@ -8,7 +8,7 @@ builds:
     goarch:
       - amd64
     ldflags:
-      - -s -w -X github.com/gzuidhof/tygo/cmd.version={{.Version}} -X github.com/gzuidhof/tygo/cmd.commit={{.Commit}} -X github.com/gzuidhof/tygo/cmd.commitDate={{.CommitDate}} -X github.com/gzuidhof/tygo/cmd.target={{.Env.GOOS}}
+      - -s -w -X github.com/cryptodeal/tygo/cmd.version={{.Version}} -X github.com/cryptodeal/tygo/cmd.commit={{.Commit}} -X github.com/cryptodeal/tygo/cmd.commitDate={{.CommitDate}} -X github.com/cryptodeal/tygo/cmd.target={{.Env.GOOS}}
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     replacements:
