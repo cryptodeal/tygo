@@ -1,4 +1,4 @@
-module github.com/gzuidhof/tygo
+module github.com/cryptodeal/tygo
 
 go 1.18
 
