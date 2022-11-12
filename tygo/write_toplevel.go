@@ -53,9 +53,8 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 
 	// e.g. "type Foo struct {}" or "type Bar = string"
 	ts, ok := spec.(*ast.TypeSpec)
+
 	if ok && ts.Name.IsExported() {
-		fmt.Println("ts:", ts)
-		fmt.Println("group:", group)
 		g.writeTypeSpec(s, ts, group)
 	}
 
@@ -66,6 +65,12 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 		fmt.Println("group:", group)
 		g.writeValueSpec(s, vs, group)
 	}
+
+	_, isIdent := ts.Type.(*ast.Ident)
+	if isIdent {
+		s.WriteString("}\n")
+	}
+
 }
 
 // Writing of type specs, which are expressions like
@@ -93,14 +98,13 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 		s.WriteString("}")
 	}
 
-	id, isIdent := ts.Type.(*ast.Ident)
+	_, isIdent := ts.Type.(*ast.Ident)
 	if isIdent {
 		fmt.Println("isIdent")
-		s.WriteString("export type ")
+		s.WriteString("export enum ")
+		// s.WriteString("export type ")
 		s.WriteString(ts.Name.Name)
-		s.WriteString(" = ")
-		s.WriteString(getIdent(id.Name))
-		s.WriteString(";")
+		s.WriteString("{\n")
 	}
 
 	if !isStruct && !isIdent {
