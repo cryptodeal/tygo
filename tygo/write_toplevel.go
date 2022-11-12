@@ -50,6 +50,8 @@ func (g *PackageGenerator) writeGroupDecl(s *strings.Builder, decl *ast.GenDecl)
 }
 
 func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *groupContext) {
+	fmt.Println("s:", s, "spec:", spec, "group:", group)
+
 	// e.g. "type Foo struct {}" or "type Bar = string"
 	ts, ok := spec.(*ast.TypeSpec)
 	if ok && ts.Name.IsExported() {
@@ -59,7 +61,6 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 	// e.g. "const Foo = 123"
 	vs, ok := spec.(*ast.ValueSpec)
 	if ok {
-		fmt.Println(group)
 		g.writeValueSpec(s, vs, group)
 	}
 }
