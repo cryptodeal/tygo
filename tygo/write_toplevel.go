@@ -143,9 +143,9 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			group.groupType = ""
 		}
 
-		s.WriteString("export const ")
 		s.WriteString(name.Name)
 		if vs.Type != nil {
+			s.WriteString(name.Name)
 			fmt.Println("vs.Type != nil")
 			s.WriteString(": ")
 
@@ -153,9 +153,11 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			g.writeType(tempSB, vs.Type, 0, true)
 			typeString := tempSB.String()
 
-			s.WriteString(typeString)
+			// s.WriteString(typeString)
 			group.groupType = typeString
 		} else if group.groupType != "" && !hasExplicitValue {
+			s.WriteString("export const ")
+			s.WriteString(name.Name)
 			fmt.Println("vs.Type = nil && group.groupType != '' && !hasExplicitValue")
 			s.WriteString(": ")
 			s.WriteString(group.groupType)
@@ -185,8 +187,13 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			}
 			s.WriteString(valueString)
 		}
+		if vs.Type != nil {
+			s.WriteByte(',')
 
-		s.WriteByte(';')
+		} else if group.groupType != "" && !hasExplicitValue {
+			s.WriteByte(';')
+		}
+
 		if vs.Comment != nil {
 			s.WriteString(" // " + vs.Comment.Text())
 		} else {
