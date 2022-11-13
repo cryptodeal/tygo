@@ -161,12 +161,12 @@ packages:
     frontmatter: |
       import { SomeType } from '../lib/sometype.ts'
 
-    # *Magically* converts structs that match the names listed here to typescript enums
-    enum_structs: |
-      StructToConvert
-      AnotherStructToConvert
-      AndAnotherOne
-      LGTMStruct
+    # *Magically* converts structs that match the names listed here to typescript enums :)
+    enum_structs:
+      - "StructToConvert"
+      - "AnotherStructToConvert"
+      - "AndAnotherOne"
+      - "LGTMStruct"
 
     # Filenames of Go source files that should not be included
     # in the output.
