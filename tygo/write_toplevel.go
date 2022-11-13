@@ -94,8 +94,9 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 		s.WriteString("}")
 	}
 
-	_, isIdent := ts.Type.(*ast.Ident)
+	ist, isIdent := ts.Type.(*ast.Ident)
 	if isIdent {
+		fmt.Println("ist.Obj.Kind:", ist.Obj.Kind)
 		// fmt.Println("isIdent")
 		s.WriteString("export enum ")
 		// s.WriteString("export type ")
