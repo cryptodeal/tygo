@@ -44,28 +44,30 @@ func (g *PackageGenerator) writeGroupDecl(s *strings.Builder, decl *ast.GenDecl)
 		iotaValue:            -1,
 	}
 
-	for _, spec := range decl.Specs {
-		fmt.Println("spec:", spec)
-		g.writeSpec(s, spec, group)
+	for i, spec := range decl.Specs {
+		isLast := i == len(decl.Specs)-1
+		// fmt.Println("spec:", spec)
+		g.writeSpec(s, spec, group, isLast)
 	}
 }
 
-func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *groupContext) {
+func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *groupContext, isLast bool) {
 
 	// e.g. "type Foo struct {}" or "type Bar = string"
 	ts, ok := spec.(*ast.TypeSpec)
 	if ok && ts.Name.IsExported() {
-		fmt.Println("ts:", ts)
-		fmt.Println("group:", group)
+		// fmt.Println("ts:", ts)
+		// fmt.Println("group:", group)
 		g.writeTypeSpec(s, ts, group)
 	}
 
 	// e.g. "const Foo = 123"
 	vs, ok := spec.(*ast.ValueSpec)
 	if ok {
-		fmt.Println("vs:", vs)
-		fmt.Println("group:", group)
-		g.writeValueSpec(s, vs, group)
+		// fmt.Println("vs:", vs)
+		// fmt.Println("group:", group)
+		g.writeValueSpec(s, vs, group, isLast)
+
 	}
 }
 
@@ -94,14 +96,19 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 		s.WriteString("}")
 	}
 
-	ist, isIdent := ts.Type.(*ast.Ident)
+	id, isIdent := ts.Type.(*ast.Ident)
 	if isIdent {
-		fmt.Println("ist.Obj.Kind:", ist.Obj.Kind)
-		// fmt.Println("isIdent")
-		s.WriteString("export enum ")
-		// s.WriteString("export type ")
-		s.WriteString(ts.Name.Name)
-		s.WriteString(" {\n")
+		if group.isGroupedDeclaration {
+			s.WriteString("export enum ")
+			s.WriteString(ts.Name.Name)
+			s.WriteString(" {\n")
+		} else {
+			s.WriteString("export type ")
+			s.WriteString(ts.Name.Name)
+			s.WriteString(" = ")
+			s.WriteString(getIdent(id.Name))
+			s.WriteString(";")
+		}
 	}
 
 	if !isStruct && !isIdent {
@@ -123,7 +130,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 
 // Writing of value specs, which are exported const expressions like
 // const SomeValue = 3
-func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec, group *groupContext) {
+func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec, group *groupContext, isLast bool) {
 	for i, name := range vs.Names {
 		group.iotaValue = group.iotaValue + 1
 		if name.Name == "_" {
@@ -147,7 +154,7 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 		s.WriteString(name.Name)
 		if vs.Type != nil {
 			s.WriteString(name.Name)
-			fmt.Println("vs.Type != nil")
+			// fmt.Println("vs.Type != nil")
 
 			tempSB := &strings.Builder{}
 			g.writeType(tempSB, vs.Type, 0, true)
@@ -158,7 +165,7 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 		} else if group.groupType != "" && !hasExplicitValue {
 			s.WriteString("export const ")
 			s.WriteString(name.Name)
-			fmt.Println("vs.Type = nil && group.groupType != '' && !hasExplicitValue")
+			// fmt.Println("vs.Type = nil && group.groupType != '' && !hasExplicitValue")
 			s.WriteString(": ")
 			s.WriteString(group.groupType)
 		}
@@ -187,7 +194,7 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			}
 			s.WriteString(valueString)
 		}
-		if vs.Type != nil {
+		if vs.Type != nil && !isLast {
 			s.WriteByte(',')
 		} else if group.groupType != "" && !hasExplicitValue {
 			s.WriteByte(';')
@@ -199,5 +206,8 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 			s.WriteByte('\n')
 		}
 
+		if vs.Type != nil && isLast && group.isGroupedDeclaration {
+			s.WriteString("}")
+		}
 	}
 }

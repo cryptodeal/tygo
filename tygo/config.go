@@ -27,6 +27,9 @@ type PackageConfig struct {
 	// You would generally use this to import custom types.
 	Frontmatter string `yaml:"frontmatter"`
 
+	// This is used to distinguish structs to convert to `enum`
+	// EnumStructs []string `yaml:"enum_structs"`
+
 	// Filenames of Go source files that should not be included in the Typescript output.
 	ExcludeFiles []string `yaml:"exclude_files"`
 
