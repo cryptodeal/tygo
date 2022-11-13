@@ -98,7 +98,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 
 	id, isIdent := ts.Type.(*ast.Ident)
 	if isIdent {
-		if group.isGroupedDeclaration {
+		if g.IsEnumStruct(ts.Name.Name) {
 			s.WriteString("export enum ")
 			s.WriteString(ts.Name.Name)
 			s.WriteString(" {\n")
@@ -207,7 +207,7 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 		}
 
 		if vs.Type != nil && isLast && group.isGroupedDeclaration {
-			s.WriteString("}")
+			s.WriteString("}\n")
 		}
 	}
 }

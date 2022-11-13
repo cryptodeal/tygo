@@ -29,6 +29,7 @@ type PackageConfig struct {
 
 	// This is used to distinguish structs to convert to `enum`
 	// EnumStructs []string `yaml:"enum_structs"`
+	EnumStructs []string `yaml:"enum_structs"`
 
 	// Filenames of Go source files that should not be included in the Typescript output.
 	ExcludeFiles []string `yaml:"exclude_files"`
