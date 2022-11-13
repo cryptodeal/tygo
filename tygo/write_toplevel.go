@@ -123,9 +123,8 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 
 	if ts.Comment != nil {
 		s.WriteString(" // " + ts.Comment.Text())
-	} else {
-		s.WriteString("\n")
 	}
+	s.WriteString("\n")
 }
 
 // Writing of value specs, which are exported const expressions like
