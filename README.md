@@ -10,9 +10,9 @@ It preserves comments, understands constants and also supports non-struct `type`
 
 ```shell
 # Go >= 1.17
-go install github.com/gzuidhof/tygo@latest
+go install github.com/cryptodeal/tygo@latest
 # Go < 1.17:
-go install github.com/gzuidhof/tygo
+go install github.com/cryptodeal/tygo
 ```
 
 ## Example
@@ -159,7 +159,14 @@ packages:
 
     # This content will be put at the top of the output Typescript file, useful for importing custom types.
     frontmatter: |
-      "import {SomeType} from "../lib/sometype.ts"
+      import { SomeType } from '../lib/sometype.ts'
+
+    # *Magically* converts structs that match the names listed here to typescript enums
+    enum_structs: |
+      StructToConvert
+      AnotherStructToConvert
+      AndAnotherOne
+      LGTMStruct
 
     # Filenames of Go source files that should not be included
     # in the output.
