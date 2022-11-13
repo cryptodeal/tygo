@@ -45,6 +45,7 @@ func (g *PackageGenerator) writeGroupDecl(s *strings.Builder, decl *ast.GenDecl)
 	}
 
 	for _, spec := range decl.Specs {
+		fmt.Println("spec:", spec)
 		g.writeSpec(s, spec, group)
 	}
 }
@@ -53,8 +54,9 @@ func (g *PackageGenerator) writeSpec(s *strings.Builder, spec ast.Spec, group *g
 
 	// e.g. "type Foo struct {}" or "type Bar = string"
 	ts, ok := spec.(*ast.TypeSpec)
-
 	if ok && ts.Name.IsExported() {
+		fmt.Println("ts:", ts)
+		fmt.Println("group:", group)
 		g.writeTypeSpec(s, ts, group)
 	}
 
@@ -82,7 +84,6 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 	if isStruct {
 		s.WriteString("export interface ")
 		s.WriteString(ts.Name.Name)
-		s.WriteString(" = ")
 
 		if ts.TypeParams != nil {
 			g.writeTypeParamsFields(s, ts.TypeParams.List)
@@ -99,7 +100,7 @@ func (g *PackageGenerator) writeTypeSpec(s *strings.Builder, ts *ast.TypeSpec, g
 		s.WriteString("export enum ")
 		// s.WriteString("export type ")
 		s.WriteString(ts.Name.Name)
-		s.WriteString("{\n")
+		s.WriteString(" {\n")
 	}
 
 	if !isStruct && !isIdent {
