@@ -151,7 +151,12 @@ func (g *PackageGenerator) writeValueSpec(s *strings.Builder, vs *ast.ValueSpec,
 		}
 
 		s.WriteString(name.Name)
+		fmt.Println("name.Name", name.Name)
+		fmt.Println("name.Obj.Name", name.Obj.Name)
 		if vs.Type != nil {
+			fmt.Println("vs.Type != nil")
+			// s.WriteString(": ")
+
 			tempSB := &strings.Builder{}
 			// g.writeType(tempSB, vs.Type, 0, true)
 			typeString := tempSB.String()
